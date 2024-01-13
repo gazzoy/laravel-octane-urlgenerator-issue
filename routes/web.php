@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SampleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => '/sample/{user}', 'as' => 'sample.'], function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [SampleController::class, 'login'])->name('login');
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('home', [SampleController::class, 'home'])->name('home');
+    });
 });
